@@ -29,8 +29,8 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             session.createNativeQuery(createTable).executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
 
     }
@@ -44,8 +44,8 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             session.createNativeQuery(dropTable).executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
 
 
@@ -55,12 +55,13 @@ public class UserDaoHibernateImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try (Session session = Util.openSession();) {
             session.beginTransaction();
+            session.disconnect();
 
             session.saveOrUpdate(new User(name, lastName, age));
 
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
     }
 
@@ -73,8 +74,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
 
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
     }
 
@@ -87,11 +88,12 @@ public class UserDaoHibernateImpl implements UserDao {
             users = session.createQuery("FROM User", User.class).list();
 
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            return users;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
 
-        return users;
+        return null;
     }
 
     @Override
@@ -103,8 +105,8 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             session.createNativeQuery(clearTable).executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
     }
 }

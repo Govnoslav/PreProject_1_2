@@ -1,6 +1,7 @@
 package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
@@ -24,6 +25,7 @@ public class Util {
 
     static {
 
+
         try {
             Configuration configuration = new Configuration();
             Properties settings = new Properties();
@@ -37,17 +39,16 @@ public class Util {
             settings.put(Environment.HBM2DDL_AUTO, "none");
 
             configuration.setProperties(settings);
-            configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
             configuration.addAnnotatedClass(User.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
 
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             throw new RuntimeException(e);
         }
+
 
     }
 
